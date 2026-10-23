@@ -1,0 +1,12 @@
+services:
+  k6:
+    image: grafana/k6:latest
+    volumes:
+      - ./k6/scripts:/scripts:ro
+      - ./k6/config:/config:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      BASE_URL: ${BASE_URL:-http://host.docker.internal:80}
+      REQUESTS_FILE: /config/requests.json
+    command: run /scripts/load-test.js

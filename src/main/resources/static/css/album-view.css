@@ -1,0 +1,70 @@
+/* Card styling */
+.card {
+    background-color: rgba(168, 85, 247, 0.4);
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #9ca3af;
+    font-weight: bold;
+}
+
+/* Top album card specific styles */
+.album-header .card-img-top {
+    max-height: 300px;
+}
+
+/* Photo grid using Flexbox for responsiveness */
+.photo-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.photo-item {
+    flex: 1 1 calc(33.333% - 20px); /* Roughly col-md-4 equivalent */
+    max-width: calc(33.333% - 20px);
+}
+
+.photo-item .card-img-top {
+    height: 200px; /* Adjust as needed for consistent photo heights */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .photo-item {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 576px) {
+    .photo-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
+
+/* Utility classes for margins */
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}

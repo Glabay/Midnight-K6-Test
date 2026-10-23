@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+    <div class="comment" th:fragment="comments" th:each="comment : ${comments}">
+        <span th:text="${comment.name()}">Name</span>
+        <p th:text="${comment.body()}">Comment</p>
+    </div>
+</body>
+</html>

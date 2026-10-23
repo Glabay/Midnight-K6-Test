@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+    <div class="photo-item" th:fragment="photos(photos, album)" th:each="photo : ${photos}">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text" th:text="${photo.title()}">Photo title</p>
+            </div>
+            <img class="card-img-top"
+                 th:src="${photo.url()}"
+                 th:attr="onerror=|this.onerror=null; this.src='https://picsum.photos/seed/${photo.id + album.id}/600/400'|"
+                 style="object-fit: cover;"
+                 alt="photo">
+        </div>
+    </div>
+</body>
+</html>

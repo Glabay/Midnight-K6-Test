@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+    <div class="post-card" th:fragment="posts" th:each="post : ${posts}">
+
+        <div class="post-header">
+            <h5 th:text="${post.title()}">Title</h5>
+
+            <a class="author"
+               th:id="'author-' + ${post.id()}"
+               th:attr="hx-get=@{/api/v1/users/{id}/username(id=${post.userId()})}"
+               hx-trigger="load"
+               hx-target="this"
+               hx-swap="innerHTML">
+            </a>
+        </div>
+
+        <div class="post-body">
+            <p th:text="${post.body()}">content</p>
+        </div>
+
+        <div th:attr="id='comment-section-' + ${post.id()}" class="comments-section">
+            <h5>Comments</h5>
+            <div th:attr="hx-get=@{/api/v1/comments/posts/{id}(id=${post.id()})}"
+                 hx-trigger="load"
+                 hx-target="this"
+                 hx-swap="innerHTML">
+            </div>
+        </div>
+
+        <div class="load-more-container"
+             id="load-more-comments-container">
+            <button id="load-more-btn"
+                    th:attr="hx-get=@{/api/v1/comments/posts/{id}(id=${post.id()})},
+                                         hx-target='#comment-section-' + ${post.id()}"
+                    hx-vals='{"page":1}'
+                    hx-trigger="click"
+                    hx-swap="beforeend"
+                    data-page="1"
+                    hx-on:click="let page = parseInt(this.dataset.page);
+                                        this.setAttribute('hx-vals', JSON.stringify({page: page}));
+                                        this.dataset.page = page + 1;">
+
+                Load More
+            </button>
+        </div>
+    </div>
+</body>
+</html>

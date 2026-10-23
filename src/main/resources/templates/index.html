@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/htmx-min.js}"></script>
+    <title>Midnight-Shift</title>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main class="feed-container">
+        <div th:replace="~{fragments/posts :: posts}"></div>
+    </main>
+</body>
+</html>

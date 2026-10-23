@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/user-view.css}">
+    <script th:src="@{/js/htmx.js}"></script>
+    <title>Midnight-Shift | User Profile</title>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main class="profile-layout">
+        <aside class="profile-sidebar">
+            <div class="profile-card">
+                <h3 th:text="${user.username()}">Username</h3>
+                <p class="profile-name" th:text="${user.name()}">Name</p>
+                <!-- TODO: Add a profile picture -->
+                <div class="profile-section">
+                    <h3>Contact Information</h3>
+                    <p><span><strong>Email:</strong></span> <span th:text="${user.email()}">Email</span></p>
+                    <p><span><strong>Phone:</strong></span> <span th:text="${user.phone()}">Phone</span></p>
+                    <p><span><strong>Website:</strong></span> <span th:text="${user.website()}">Website</span></p>
+                </div>
+                <div class="profile-section">
+                    <h3>Address</h3>
+                    <p><span><strong>Street:</strong></span> <span th:text="${user.address().street()}">Street</span></p>
+                    <p><span><strong>Suite:</strong></span> <span th:text="${user.address().suite()}">Suite</span></p>
+                    <p><span><strong>City:</strong></span> <span th:text="${user.address().city()}">City</span></p>
+                </div>
+                <div class="profile-section">
+                    <h3>Albums</h3>
+                    <p th:if="${#lists.isEmpty(albums)}">This user has no albums yet.</p>
+                    <div th:if="${not #lists.isEmpty(albums)}" class="albums-list">
+                        <ul th:each="album : ${albums}">
+                            <li>
+                                <a th:text="${album.title()}"
+                                   th:href="@{/album/{id}/photos(id=${album.id()})}"/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <section class="profile-posts">
+            <div class="section-heading">
+                <h2 th:text="${user.username()} + 's posts'">Posts</h2>
+            </div>
+            <div th:if="${#lists.isEmpty(posts)}" class="empty-state">
+                <p>This user has no posts yet.</p>
+            </div>
+            <article class="post-card" th:each="post : ${posts}">
+                <div class="post-header">
+                    <h5 th:text="${post.title()}">Title</h5>
+                </div>
+                <div class="post-body">
+                    <p th:text="${post.body()}">content</p>
+                </div>
+                <div th:attr="id='comment-section-' + ${post.id()}" class="comments-section">
+                    <h5>Comments</h5>
+                    <div th:attr="hx-get=@{/api/v1/comments/posts/{id}(id=${post.id()})}"
+                         hx-trigger="load"
+                         hx-target="this"
+                         hx-swap="innerHTML">
+                    </div>
+                </div>
+                <div th:if="${postCount > 3}"
+                     class="load-more-container"
+                     id="load-more-comments-container">
+
+                    <button id="load-more-btn"
+                            th:attr="hx-get=@{/api/v1/comments/posts/{id}(id=${post.id()})},
+                                     hx-target='#comment-section-' + ${post.id()}"
+                            hx-vals='{"page":1}'
+                            hx-trigger="click"
+                            hx-swap="beforeend"
+                            data-page="1"
+                            hx-on:click="let page = parseInt(this.dataset.page);
+                                    this.setAttribute('hx-vals', JSON.stringify({page: page}));
+                                    this.dataset.page = page + 1;">
+
+                        Load More
+                    </button>
+                </div>
+
+            </article>
+        </section>
+    </main>
+</body>
+</html>

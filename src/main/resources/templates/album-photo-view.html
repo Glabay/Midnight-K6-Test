@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/album-view.css}">
+    <script th:src="@{/js/htmx.js}"></script>
+    <title>Midnight-Shift | Photo Album</title>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main class="photo-container">
+        <section class="card mb-4">
+            <img class="card-img-top"
+                 th:src="${photos[0].thumbnailUrl()}"
+                 th:attr="onerror=|this.onerror=null; this.src='https://picsum.photos/seed/${album.id}/600/400'|"
+                 style="height: 300px; object-fit: cover;"
+                 alt="Card image cap">
+            <div class="card-body">
+                <h3 class="card-title" th:text="${album.title()}">Album title</h3>
+            </div>
+        </section>
+        <div id="photo-grid" class="photo-grid">
+            <div class="photo-item" th:if="${#lists.isEmpty(photos)}">
+                <p>This album has no photos yet.</p>
+            </div>
+            <div class="photo-item"
+                 th:if="${not #lists.isEmpty(photos)}"
+                 th:replace="~{fragments/photos :: photos(photos=${photos}, album=${album})}">
+            </div>
+        </div>
+
+        <div class="load-more-container"
+             id="load-more-photos-container">
+            <button id="load-more-btn"
+                    th:attr="hx-get=@{/api/v1/photos/album/{id}(id=${album.id()})}"
+                    hx-vals='{"page":1}'
+                    hx-target="#photo-grid"
+                    hx-trigger="click"
+                    hx-swap="beforeend"
+                    data-page="1"
+                    hx-on:click="let page = parseInt(this.dataset.page);
+                                 this.setAttribute('hx-vals', JSON.stringify({page: page}));
+                                 this.dataset.page = page + 1;">
+
+                Load More
+            </button>
+        </div>
+    </main>
+</body>
+</html>

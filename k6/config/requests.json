@@ -1,0 +1,24 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/photos/album/42",
+      "weight": 25
+    },
+    {
+      "method": "GET",
+      "path": "/users/3",
+      "weight": 15
+    },
+    {
+      "method": "GET",
+      "path": "/album/32/photos",
+      "weight": 40
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/3/username",
+      "weight": 20
+    }
+  ]
+}
