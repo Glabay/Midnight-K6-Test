@@ -14,7 +14,7 @@ import org.springframework.web.client.RestClient;
 @SpringBootApplication
 public class Application {
 
-    void main() {
+    static void main(String[] args) {
         SpringApplication.run(Application.class);
     }
 
